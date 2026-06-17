@@ -6,3 +6,6 @@ class LengthError(Exception):
 
 class PresenceError(Exception):
     pass
+
+class FormatError(Exception):
+    pass

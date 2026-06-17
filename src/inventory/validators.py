@@ -1,4 +1,5 @@
-from exceptions import IntError, PresenceError, LengthError
+from exceptions import IntError, PresenceError, LengthError, FormatError
+from datetime import datetime
 
 def intCheck(val, canBeZero):
     if isinstance(val, int):
@@ -26,3 +27,10 @@ def LengthCheck(val):
         return True
     else:
         raise LengthError("The sku id must be exactly 5 characters")
+    
+def dateCheck(date):
+    try:
+        datetime.strptime(date, "%d-%m-%Y")
+        return True
+    except ValueError:
+        raise FormatError("The format must be, date-month-year, e.g 01-08-2026")

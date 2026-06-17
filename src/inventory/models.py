@@ -1,4 +1,4 @@
-from validators import intCheck, LengthCheck, PresenceCheck
+from validators import intCheck, LengthCheck, PresenceCheck, dateCheck
 
 class Product:
     def __init__(self, price: int, sku: str, pname: str, stock: int, supplier: str):
@@ -59,5 +59,15 @@ class Product:
             
 
 class Perishable(Product):
-    def __init__(self, expiry: str):
-        pass
+    def __init__(self, price, sku, pname, stock, supplier, expiry):
+        super().__init__(price, sku, pname, stock, supplier)
+        self.expiry = expiry
+
+    @property
+    def expiry(self):
+        return self._expiry
+    
+    @expiry.setter
+    def expiry(self, val):
+        if dateCheck(val):
+            self._expiry = val
