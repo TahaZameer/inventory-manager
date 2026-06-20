@@ -15,6 +15,9 @@ class Product:
             return Product(**data)
         elif typeProduct == "Perishable":
             return Perishable(**data)
+        
+    def __repr__(self):
+        return f"{self.__class__.__name__}(sku={self._sku}, product_name={self._pname}, supplier={self._supplier})"
 
     def to_dict(self):
         return {
@@ -80,6 +83,9 @@ class Perishable(Product):
     def __init__(self, price, sku, pname, stock, supplier, expiry):
         super().__init__(price, sku, pname, stock, supplier)
         self._expiry = expiry
+
+    def __repr__(self):
+        return f"{self.__class__.__name__}(sku={self._sku}, product_name={self._pname}, supplier={self._supplier}, expiry={self._expiry})"
 
     def to_dict(self):
         data = super().to_dict()
