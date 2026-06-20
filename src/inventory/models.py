@@ -8,6 +8,24 @@ class Product:
         self.stock = stock
         self.supplier = supplier
 
+    @classmethod
+    def from_dict(cls, data):
+        typeProduct = data.pop("type")
+        if typeProduct == "Product":
+            return Product(**data)
+        elif typeProduct == "Perishable":
+            return Perishable(**data)
+
+    def to_dict(self):
+        return {
+            "price": self._price,
+            "sku": self._sku,
+            "pname": self._pname,
+            "stock": self._stock,
+            "supplier": self._supplier,
+            "type": self.__class__.__name__
+        }
+
     @property
     def cost(self):
         return f"{(self._price/100):.2f}"
@@ -61,7 +79,12 @@ class Product:
 class Perishable(Product):
     def __init__(self, price, sku, pname, stock, supplier, expiry):
         super().__init__(price, sku, pname, stock, supplier)
-        self.expiry = expiry
+        self._expiry = expiry
+
+    def to_dict(self):
+        data = super().to_dict()
+        data["expiry"] = self._expiry
+        return data
 
     @property
     def expiry(self):
