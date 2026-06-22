@@ -9,3 +9,7 @@ class PresenceError(Exception):
 
 class FormatError(Exception):
     pass
+
+
+class ProductNotFoundError(Exception):
+    pass
