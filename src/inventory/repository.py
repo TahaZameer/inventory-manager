@@ -1,11 +1,16 @@
 import json
-from exceptions import ProductNotFoundError, CorruptDataError
 import os
+from pathlib import Path
+from inventory.exceptions import ProductNotFoundError, CorruptDataError
+
+DATA_DIR = Path(__file__).resolve().parent.parent.parent / "data"
+DATA_FILE = DATA_DIR / "products.json"
+TEMP_FILE = DATA_DIR / "products.tmp"
 
 class Repository:
     def __init__(self):
         try:
-            with open("data/products.json") as f:
+            with open(DATA_FILE) as f:
                data = json.load(f)
         except FileNotFoundError:
             data = {"version": 1,
@@ -45,7 +50,7 @@ class Repository:
                     "next_id": self.next_id,
                     "products": self.products}
         
-        with open("data/temp.json", "w") as f:
+        with open(TEMP_FILE, "w") as f:
             json.dump(data, f, indent=2)
 
-        os.replace("data/temp.json", "data/products.json")
+        os.replace(TEMP_FILE, DATA_FILE)

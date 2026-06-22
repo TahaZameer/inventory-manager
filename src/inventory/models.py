@@ -1,4 +1,4 @@
-from validators import intCheck, LengthCheck, PresenceCheck, dateCheck
+from inventory.validators import intCheck, LengthCheck, PresenceCheck, dateCheck
 
 class Product:
     def __init__(self, price: int, sku: str, pname: str, stock: int, supplier: str):
