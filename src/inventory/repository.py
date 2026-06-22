@@ -1,6 +1,6 @@
 import json
-from models import Product
 from exceptions import ProductNotFoundError
+import os
 
 class Repository:
     def __init__(self):
@@ -37,10 +37,13 @@ class Repository:
             raise ProductNotFoundError()
         del self.products[key]
 
-    def save(self):
-        with open("data/products.json", "w") as f:
-            data = {"version": self.version,
+    #Making save atomic, prevents corruption of data if program crashes/closes during saving. data is either NEW or OLD
+    def save(self):    
+        data = {"version": self.version,
                     "next_id": self.next_id,
                     "products": self.products}
-            
+        
+        with open("data/temp.json", "w") as f:
             json.dump(data, f, indent=2)
+
+        os.replace("data/temp.json", "data/products.json")
