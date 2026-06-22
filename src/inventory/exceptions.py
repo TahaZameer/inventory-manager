@@ -13,3 +13,6 @@ class FormatError(Exception):
 
 class ProductNotFoundError(Exception):
     pass
+
+class CorruptDataError(Exception):
+    pass

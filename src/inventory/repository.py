@@ -1,5 +1,5 @@
 import json
-from exceptions import ProductNotFoundError
+from exceptions import ProductNotFoundError, CorruptDataError
 import os
 
 class Repository:
@@ -11,6 +11,8 @@ class Repository:
             data = {"version": 1,
                     "next_id": 1,
                     "products": {}}
+        except json.JSONDecodeError:
+            raise CorruptDataError()
         self.version = data["version"]
         self.next_id = data["next_id"]
         self.products = data["products"]
@@ -47,3 +49,8 @@ class Repository:
             json.dump(data, f, indent=2)
 
         os.replace("data/temp.json", "data/products.json")
+
+try:
+    repo = Repository()
+except CorruptDataError:
+    print("corrupt file caught correctly")
