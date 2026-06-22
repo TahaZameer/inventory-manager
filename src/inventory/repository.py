@@ -49,8 +49,3 @@ class Repository:
             json.dump(data, f, indent=2)
 
         os.replace("data/temp.json", "data/products.json")
-
-try:
-    repo = Repository()
-except CorruptDataError:
-    print("corrupt file caught correctly")
