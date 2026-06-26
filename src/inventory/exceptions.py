@@ -16,3 +16,12 @@ class ProductNotFoundError(Exception):
 
 class CorruptDataError(Exception):
     pass
+
+class DuplicateSKUError(Exception):
+    pass
+
+class InsufficientStock(Exception):
+    pass
+
+class InvalidAmountError(Exception):
+    pass
