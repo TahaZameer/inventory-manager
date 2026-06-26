@@ -68,36 +68,3 @@ def receive_stock(sku, amount):
     product = Product.from_dict(data)
     repo.edit(sku, product)
     repo.save()
-
-# create a product
-add_product(299, "ABCDE", "bat", 10, "SupplierX")
-print("start stock:", find_product("ABCDE")["stock"])   # 10
-
-# valid dispatch
-dispatch_stock("ABCDE", 3)
-print("after dispatch 3:", find_product("ABCDE")["stock"])   # 7
-
-# valid receive
-receive_stock("ABCDE", 5)
-print("after receive 5:", find_product("ABCDE")["stock"])   # 12
-
-# oversell, should block
-try:
-    dispatch_stock("ABCDE", 100)
-except InsufficientStock:
-    print("oversell blocked")
-
-# negative dispatch, should block
-try:
-    dispatch_stock("ABCDE", -5)
-except InvalidAmountError:
-    print("negative dispatch blocked")
-
-# negative receive, should block
-try:
-    receive_stock("ABCDE", -5)
-except InvalidAmountError:
-    print("negative receive blocked")
-
-# stock unchanged after all the blocked attempts
-print("final stock (should be 12):", find_product("ABCDE")["stock"])
