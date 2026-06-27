@@ -28,3 +28,6 @@ class InvalidAmountError(Exception):
 
 class ItemNotInOrderError(Exception):
     pass
+
+class OrderNotFoundError(Exception):
+    pass
