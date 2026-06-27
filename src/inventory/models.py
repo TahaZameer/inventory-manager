@@ -1,4 +1,5 @@
 from inventory.validators import intCheck, LengthCheck, PresenceCheck, dateCheck
+from inventory.exceptions import ItemNotInOrderError
 
 class Product:
     def __init__(self, price: int, sku: str, pname: str, stock: int, supplier: str):
@@ -100,3 +101,32 @@ class Perishable(Product):
     def expiry(self, val):
         if dateCheck(val):
             self._expiry = val
+
+class Order:
+    def __init__(self):
+        self.status = "unconfirmed"
+        self.items = {}
+
+    def add_item(self, sku, quantity):
+        if sku in self.items:
+            self.items[sku] += quantity
+        else:
+            self.items[sku] = quantity
+
+    def remove_item(self, sku, quantity):
+        if sku not in self.items:
+            raise ItemNotInOrderError()
+        if quantity >= self.items[sku]:
+            del self.items[sku]
+        else:
+            self.items[sku] -= quantity
+
+    def to_dict(self):
+        return {"status": self.status, "items": self.items}
+
+    @classmethod
+    def from_dict(cls, data):
+        order = cls()
+        order.items = data["items"]
+        order.status = data["status"]
+        return order

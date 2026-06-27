@@ -25,3 +25,6 @@ class InsufficientStock(Exception):
 
 class InvalidAmountError(Exception):
     pass
+
+class ItemNotInOrderError(Exception):
+    pass
