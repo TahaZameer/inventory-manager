@@ -12,6 +12,16 @@ def expiry_report():
                 to_show.append((product["sku"], product["pname"], days_left))
     return to_show
 
+def paginate(products, page_size):
+    page = []
+    for product in products:
+        page.append(product)
+        if len(page) == page_size:
+            yield page
+            page = []
+    if page:
+        yield page
+
 def inventory_value():
     total_value = 0
     for product in repo.products.values():
