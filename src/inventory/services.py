@@ -1,8 +1,9 @@
-from inventory.repository import Repository
-from inventory.models import Product, Perishable
-from inventory.exceptions import ProductNotFoundError, DuplicateSKUError, InsufficientStock, InvalidAmountError
+from inventory.repository import Repository, OrderRepository
+from inventory.models import Product, Perishable, Order
+from inventory.exceptions import ProductNotFoundError, DuplicateSKUError, InsufficientStock, InvalidAmountError, OrderStatusLocked
 
 repo = Repository()
+order_repo = OrderRepository()
 
 def add_product(price, sku, pname, stock, supplier):
     key = repo.find(sku)
@@ -68,3 +69,39 @@ def receive_stock(sku, amount):
     product = Product.from_dict(data)
     repo.edit(sku, product)
     repo.save()
+
+def create_order():
+    order = Order()
+    order_id = order_repo.add(order)
+    order_repo.save()
+    return order_id
+
+def add_to_order(order_id, sku, quantity):
+    order_dict = order_repo.get(order_id)
+    order = Order.from_dict(order_dict)
+    if order.status != "unconfirmed":
+        raise OrderStatusLocked()
+    if repo.find(sku) is None:
+        raise ProductNotFoundError()
+    if quantity < 1:
+        raise InvalidAmountError()
+    order.add_item(sku, quantity)
+    order_repo.edit(order_id ,order)
+    order_repo.save()
+
+def confirm_order(order_id):
+    order = Order.from_dict(order_repo.get(order_id))
+    if order.status != "unconfirmed":
+        raise OrderStatusLocked()
+    for sku, quantity in order.items.items():
+        key = repo.find(sku)
+        if key is None:
+            raise ProductNotFoundError()
+        product = repo.products[key]
+        if quantity > product["stock"]:
+            raise InsufficientStock()
+    for sku, quantity in order.items.items():
+        dispatch_stock(sku, quantity)
+    order.status = "confirmed"
+    order_repo.edit(order_id, order)
+    order_repo.save()

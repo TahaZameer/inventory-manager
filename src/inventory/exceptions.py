@@ -31,3 +31,6 @@ class ItemNotInOrderError(Exception):
 
 class OrderNotFoundError(Exception):
     pass
+
+class OrderStatusLocked(Exception):
+    pass

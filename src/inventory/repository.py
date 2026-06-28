@@ -79,8 +79,10 @@ class OrderRepository:
         return self.orders[order_id]
 
     def add(self, order):
+        order_id = str(self.next_id)
         self.orders[str(self.next_id)] = order.to_dict()
         self.next_id += 1
+        return order_id
     
     def edit(self, order_id, order):
         if order_id not in self.orders:
