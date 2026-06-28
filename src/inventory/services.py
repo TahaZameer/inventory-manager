@@ -105,3 +105,22 @@ def confirm_order(order_id):
     order.status = "confirmed"
     order_repo.edit(order_id, order)
     order_repo.save()
+
+def fulfil_order(order_id):
+    order = Order.from_dict(order_repo.get(order_id))
+    if order.status != "confirmed":
+        raise OrderStatusLocked()
+    order.status = "fulfilled"
+    order_repo.edit(order_id, order)
+    order_repo.save()
+
+def cancel_order(order_id):
+    order = Order.from_dict(order_repo.get(order_id))
+    if order.status in ("cancelled", "fulfilled"):
+        raise OrderStatusLocked()
+    if order.status == "confirmed":
+        for sku, quantity in order.items.items():
+            receive_stock(sku, quantity)
+    order.status = "cancelled"
+    order_repo.edit(order_id, order)
+    order_repo.save()
