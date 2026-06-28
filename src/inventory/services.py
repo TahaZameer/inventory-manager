@@ -1,9 +1,6 @@
-from inventory.repository import Repository, OrderRepository
+from inventory.store import repo, order_repo
 from inventory.models import Product, Perishable, Order
 from inventory.exceptions import ProductNotFoundError, DuplicateSKUError, InsufficientStock, InvalidAmountError, OrderStatusLocked
-
-repo = Repository()
-order_repo = OrderRepository()
 
 def add_product(price, sku, pname, stock, supplier):
     key = repo.find(sku)
