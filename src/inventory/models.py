@@ -29,10 +29,6 @@ class Product:
             "supplier": self._supplier,
             "type": self.__class__.__name__
         }
-
-    @property
-    def cost(self):
-        return f"{(self._price/100):.2f}"
     
     @property
     def price(self):
@@ -83,7 +79,7 @@ class Product:
 class Perishable(Product):
     def __init__(self, price, sku, pname, stock, supplier, expiry):
         super().__init__(price, sku, pname, stock, supplier)
-        self._expiry = expiry
+        self.expiry = expiry
 
     def __repr__(self):
         return f"{self.__class__.__name__}(sku={self._sku}, product_name={self._pname}, supplier={self._supplier}, expiry={self._expiry})"

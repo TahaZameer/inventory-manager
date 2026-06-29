@@ -9,7 +9,7 @@ def expiry_report():
             expiry_date = datetime.strptime(product["expiry"], "%d-%m-%Y")
             days_left = (expiry_date - today).days
             if days_left <= 7:
-                result.append((product["sku"], product["pname"], days_left))
+                result.append((product["sku"], product["pname"], f"Days Left: {days_left}"))
     return result
 
 def low_stock_report(threshold=10):

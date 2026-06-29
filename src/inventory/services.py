@@ -121,3 +121,7 @@ def cancel_order(order_id):
     order.status = "cancelled"
     order_repo.edit(order_id, order)
     order_repo.save()
+
+def view_order(order_id):
+    order = order_repo.get(order_id)
+    return order
