@@ -16,7 +16,7 @@ def call_service(func, *arg):
 
 def do_add_product():
     price = int_input("Price(in cents): ")
-    sku = input("SKU (5 Characters): ")
+    sku = input("SKU(5 Characters): ")
     pname = input("Product Name: ")
     stock = int_input("Stock: ")
     supplier = input("Supplier: ")
@@ -25,7 +25,7 @@ def do_add_product():
 
 def do_add_perishable():
     price = int_input("Price(in cents): ")
-    sku = input("SKU (5 Characters): ")
+    sku = input("SKU(5 Characters): ")
     pname = input("Product Name: ")
     stock = int_input("Stock: ")
     supplier = input("Supplier: ")
@@ -58,16 +58,19 @@ def do_dispatch_stock():
 
 def do_find_product():
     sku = input("SKU: ")
-    product = find_product(sku)
-    if product is None:
-        print("Product Does Not Exist.")
-    else:
-        price = product["price"]
-        result = (f'Name: {product["pname"]}, SKU: {product["sku"]}, Stock: {product["stock"]}, Price: ${price/100:.2f}, Type: {product["type"]}')
-        if product["type"] != "Perishable":
-            print(result)
+    try:
+        product = find_product(sku)
+        if product is None:
+            print("Product Does Not Exist.")
         else:
-            print(result + f', Expiry: {product["expiry"]}')
+            price = product["price"]
+            result = (f'Name: {product["pname"]}, SKU: {product["sku"]}, Stock: {product["stock"]}, Price: ${price/100:.2f}, Type: {product["type"]}')
+            if product["type"] != "Perishable":
+                print(result)
+            else:
+                print(result + f', Expiry: {product["expiry"]}')
+    except Exception as e:
+        print(f"Error: {e}")
 
 
 def do_edit_product():
@@ -77,10 +80,10 @@ def do_edit_product():
           "3": "stock",
           "4": "supplier"}
     
+    sku = input("SKU: ")
+
     for key, value in fields.items():
         print(f"{key}: {value}")
-
-    sku = input("SKU: ")
 
     while True:
         field = input("Choose Field To Edit: ")
@@ -132,7 +135,7 @@ def do_view_order():
 
 def do_inventory_value():
     result = inventory_value()
-    print(f"Total Inventory Value: {result/100:.2f}")
+    print(f"Total Inventory Value: ${result/100:.2f}")
 
 def do_low_stock_report():
     report = low_stock_report()
